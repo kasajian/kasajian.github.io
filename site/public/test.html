@@ -1,1 +1,16 @@
-<button>RefreshK</button>
+<button>cool</button>
+<script>
+
+function my_function() {
+var url = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href;
+
+//    alert(url);
+console.log(url)
+}
+if (window.attachEvent) {window.attachEvent('onload', my_function);}
+else if (window.addEventListener) {window.addEventListener('load', my_function, false);}
+else {document.addEventListener('load', my_function, false);}
+
+</script>
