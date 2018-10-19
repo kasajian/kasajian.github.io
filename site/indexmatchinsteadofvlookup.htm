@@ -1,0 +1,81 @@
+<html>
+<head>
+<style>
+
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #bbb;
+    padding: 4px;
+}
+.tableHeader {
+  text-align: center;
+  background-color: blue;
+  color:white;
+}
+.label {
+  text-align: center;
+  background-color: lightgray;
+}
+</style>
+</head>
+<body>
+<table>
+ <tr class='label'>
+  <td></td>
+  <td>A</td>
+  <td>B</td>
+ </tr>
+ <tr class='label'>
+  <td>1</td>
+  <td class='tableHeader'>State</td>
+  <td class='tableHeader'>Flower</td>
+ </tr>
+ <tr>
+  <td class='label'>2</td>
+  <td>Alabama</td>
+  <td>Camellia <br>
+ </tr>
+ <tr>
+  <td class='label'>3</td>
+  <td>Alaska</td>
+  <td>Forget-me-not</td>
+ </tr>
+ <tr>
+  <td class='label'>4</td>
+  <td>Arizona</td>
+  <td>Saguaro cactus blossom</td>
+ </tr>
+ <tr>
+  <td class='label'>5</td>
+  <td>Arkansas</td>
+  <td>Apple blossom</td>
+ </tr>
+ <tr>
+  <td class='label'>6</td>
+  <td>California</td>
+  <td>California poppy</td>
+ </tr>
+ <tr>
+  <td class='label'>7</td>
+  <td>Colorado</td>
+  <td>Columbine</td>
+ </tr>
+ <tr>
+  <td class='label'>8</td>
+  <td>Connecticut</td>
+  <td>Mountain laurel</td>
+ </tr>
+ <tr>
+  <td class='label'>9</td>
+  <td>Delaware</td>
+  <td>Peach blossom</td>
+ </tr>
+</table>
+<pre>=VLOOKUP("California", A2:B9,2, FALSE)</pre>
+is the same as:
+<pre>=INDEX(B2:B9,MATCH("California", A2:A9, 0))</pre>
+</body>
+</html>
