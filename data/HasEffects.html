@@ -1,392 +1,129 @@
-<html>
+Visual Studio Analyzer
 
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=Generator content="Microsoft Word 15 (filtered)">
-<style>
-<!--
- /* Font Definitions */
- @font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:Consolas;
-	panose-1:2 11 6 9 2 2 4 3 2 4;}
- /* Style Definitions */
- p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin-top:0in;
-	margin-right:0in;
-	margin-bottom:8.0pt;
-	margin-left:0in;
-	line-height:107%;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-.MsoChpDefault
-	{font-family:"Calibri",sans-serif;}
-.MsoPapDefault
-	{margin-bottom:8.0pt;
-	line-height:107%;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:.5in .5in .5in .5in;}
-div.WordSection1
-	{page:WordSection1;}
--->
-</style>
+I want a Roslyn analyzer which does the following:
 
-</head>
+If a method lacks a particularly attribute annotation, I want to generate a warning if any of the methods it calls has a particular attribute.
 
-<body lang=EN-US>
+Imagine I have the following Attributes:
 
-<div class=WordSection1>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
 
-<p class=MsoNormal>Visual Studio Analyzer</p>
+    public class HasEffects : Attribute
 
-<p class=MsoNormal>I want a Roslyn analyzer which does the following:</p>
+    {
 
-<p class=MsoNormal>If a method lacks a particularly attribute annotation, I
-want to generate a warning if any of the methods it calls has that particular
-attribute.</p>
+        public HasEffects(params string[] effect) { }
 
-<p class=MsoNormal>For example, imagine I have the following Attribute:</p>
+    }
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    [</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeUsage</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeTargets</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Method</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> | </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeTargets</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Property</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> | </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeTargets</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Class</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> | </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeTargets</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Struct</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> | </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>AttributeTargets</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Interface</span></b><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>)]</span></p>
+and:
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>class</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>HasEffects</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> : </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>Attribute</span></p>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    {</span></p>
+    public class WithEffects : Attribute
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>HasEffects</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>params</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>string</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>[] effect) { }</span></p>
+    {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    }</span></p>
+        public WithEffects(params string[] effect) { }
 
-<p class=MsoNormal style='margin-top:6.0pt'>Along with helper class:</p>
+    }
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>static</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>class</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>SideEffect</span></p>
+Along with helper class:
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    {</span></p>
+    public static class SideEffect
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>const</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>string</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>IO</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> = </span><span style='font-size:9.5pt;font-family:Consolas;
-color:#A31515'>&quot;IO&quot;</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>;</span></p>
+    {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>const</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>string</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>State</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> = </span><span style='font-size:9.5pt;font-family:Consolas;
-color:#A31515'>&quot;State&quot;</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>;</span></p>
+        public const string IO = "IO";
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    }</span></p>
+        public const string State = "State";
 
-<p class=MsoNormal><span style='font-size:9.5pt;line-height:107%;font-family:
-Consolas;color:black'>}</span></p>
+    }
 
-<p class=MsoNormal>In the following example, the side-effect “State” is adorned
-on the method CurrentTime().   Therefore, the call to CurrentTime() in
-CheckDifference(), as highlighted, should be flagged as a warning because the
-definition of the CheckDifference() method should also have the same
-annotation.</p>
+}
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>Incorrect:</span></b></p>
+In the following example, the side-effect “State” is adorned on the method CurrentTime().   Therefore, the call to CurrentTime() in CheckDifference(), as highlighted, should be flagged as a warning because the definition of the CheckDifference() method should also have an annotation.
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>class</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>UpdateBackend</span></p>
+Incorrect:
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    {</span></p>
+    public class UpdateBackend
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>void</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>CheckDifference</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>int</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> id)</span></p>
+    {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        {</span></p>
+        public void CheckDifference(int id)
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>var</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> stamp = </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>GetStamp</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(id);</span></p>
+        {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue;background:yellow'>var</span><span style='font-size:9.5pt;
-font-family:Consolas;color:black;background:yellow'> currentTime = </span><span
-style='font-size:9.5pt;font-family:Consolas;color:darkcyan;background:yellow'>CurrentTime</span><span
-style='font-size:9.5pt;font-family:Consolas;color:black;background:yellow'>();</span></p>
+            var stamp = GetStamp(id);
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>StoreChanges</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>(stamp, currentTime);</span></p>
+            var currentTime = CurrentTime();
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        }</span></p>
+            StoreChanges(stamp, currentTime);
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>&nbsp;</span></p>
+        }
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        [</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>HasEffects</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>SideEffect</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>State</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>)]</span></p>
+ 
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>DateTime</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>CurrentTime</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>()</span></p>
+        [HasEffects(SideEffect.State)]
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        {</span></p>
+        public DateTime CurrentTime()
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>return</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>DateTime</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>.</span><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Now</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>;</span></p>
+        {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        }</span></p>
+            return DateTime.Now;
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>&nbsp;</span></p>
+        }
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>Correct</span></b></p>
+ 
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>class</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>UpdateBackend</span></p>
+Correct
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>    {</span></p>
+    public class UpdateBackend
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        [</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>HasEffects</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>SideEffect</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>State</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>)] <span style='background:aqua'>// Attribute added to remove
-warning.</span></span></p>
+    {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>void</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>CheckDifference</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>int</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> id)</span></p>
+        [WithEffects(SideEffect.State)] // Attribute added to remove warning.
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        {</span></p>
+        public void CheckDifference(int id)
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>var</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> stamp = </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>GetStamp</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(id);</span></p>
+        {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>var</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> currentTime = </span><span style='font-size:9.5pt;font-family:
-Consolas;color:darkcyan'>CurrentTime</span><span style='font-size:9.5pt;
-font-family:Consolas;color:black'>();</span></p>
+            var stamp = GetStamp(id);
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>StoreChanges</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>(stamp, currentTime);</span></p>
+            var currentTime = CurrentTime();
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        }</span></p>
+            StoreChanges(stamp, currentTime);
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>&nbsp;</span></p>
+        }
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        [</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>HasEffects</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>(</span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>SideEffect</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>.</span><b><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>State</span></b><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>)]</span></p>
+ 
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>public</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>DateTime</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkcyan'>CurrentTime</span><span style='font-size:9.5pt;font-family:
-Consolas;color:black'>()</span></p>
+        [HasEffects(SideEffect.State)]
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        {</span></p>
+        public DateTime CurrentTime()
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>            </span><span style='font-size:9.5pt;font-family:Consolas;
-color:blue'>return</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'> </span><span style='font-size:9.5pt;font-family:Consolas;
-color:darkblue'>DateTime</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>.</span><span style='font-size:9.5pt;font-family:Consolas;
-color:purple'>Now</span><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>;</span></p>
+        {
 
-<p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-normal;text-autospace:none'><span style='font-size:9.5pt;font-family:Consolas;
-color:black'>        }</span></p>
+            return DateTime.Now;
 
-</div>
+        }
 
-</body>
+ 
 
-</html>
+Because the method CurrentTime() uses DateTime.Now, it has the “State” effect, as indicated by the HasEffects() attribute.   Therefore, all callers of CurrentTime, such as CheckDifference(), must be annotated with either HasEffects or WithAffects.
+
+The difference between HasEffects and WithEffects is as follows:
+
+1.      Method annotated with HasEffects can only be called by methods that are annotated by HasEffects or WithEffects
+
+2.      Method annotated WithEffects must call at least one method annotated by HasEffects or WithEffects
+
+ 
+
+In the above example, rule 1 causes the light-blue warning to be generated.
+
+ 
+
+However, if you then modify the implementation of CurrentTime() and remove DateTime.Now, and its associated HasEffects annocation, it’s not longer necessary (or valid) for CheckDifference to be annotated with WithEffects   So based on rule 1, the WithEffects attribute must be removed from CheckDifference at this point.  The Analyzer should catch that and report it as a warning.
+
+ 
