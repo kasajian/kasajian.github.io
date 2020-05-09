@@ -5,7 +5,7 @@
 Type your name: <input type="text" id="userName" value="Wendy"><br/><br/>
 <button onclick="onClick()">Create</button><br/><br/>
 <div id="out" hidden>
-<p>Result:</p><textarea id="result" rows="24" cols="60"></textarea><br/>
+<p>Result:</p><textarea id="result" rows="16" cols="60"></textarea><br/>
 Try it at repl.it: <a href="https://repl.it/languages/basic">https://repl.it/languages/basic</a>
 </div>
 
@@ -42,7 +42,7 @@ function wendy(userName) {
 
 function onClick() {
   var userName = document.getElementById("userName").value;
-  var result = wendy(userName.toUpperCase());
+  var result = wendy(userName.substr(0,16).toUpperCase());
   document.getElementById("result").innerHTML = result;
   document.getElementById("out").hidden = false; 
 }
