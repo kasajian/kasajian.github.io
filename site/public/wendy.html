@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>  <head><title>Insane</title></head>
+<body>
+<h3>Wendy Function Creator</h3>
+Type your name: <input type="text" id="userName" value="ABCDEFGHIJKLMNOP"><br/><br/>
+<button onclick="onClick()">Create</button><br/><br/>
+<div id="out" hidden>
+<p>Result:</p><textarea id="result" rows="24" cols="60"></textarea>
+</div>
+
+<script>
+function wendy(userName) {
+  var everything = 42;
+
+  var me_and = 23;
+  var x, result = '';
+  result += `EVERYTHING = ${everything}\n`;
+  result += `E = EXP(1)\n`;
+  result += `T = ""\n`;
+  result += `FOR I = 0 TO ${userName.length}\n`;
+  var a = [];
+  for (var i = 0; i < userName.length; i++) {
+    var d = userName[i].charCodeAt() - 65;
+    a.push({d, s: `INT(${x(i)} = I) * ${d} + `});
+  }
+  a.sort(function(x, y) { return x.d - y.d; } ); 
+  var u = '';
+  for (var i = 0; i < a.length; i++) {
+    u += `${a[i].s}`;
+  }
+  result += `  T = T + CHR(${me_and} + ${u.substr(0, u.length - 2)} + EVERYTHING)\n`;
+  result += `NEXT I\n`;
+  result += `PRINT T\n`;
+  return result;
+  function x(z) {
+    var h = [1,-4,-3,-3,-5,8,-2,9,3,-6,-6,4,2,0,-9,3];
+    w=function(v){return [7,5,8,12,0,11,15,6,2,13,4,10,3,1,14,9][v];}
+    k = [5,9][w(z)%2]-h[w(z)];
+    return ["SQR((17 + COS(PI)))",13,8,12,10,"-COS(PI)",7,0,"1 + LOG(E)","3 + COS(PI) + 13",11,5,"(2 + SIN(PI / 2))",9,14,6][w(k)];}
+}
+
+function onClick() {
+  var userName = document.getElementById("userName").value;
+  var result = wendy(userName.toUpperCase());
+  document.getElementById("result").innerHTML = result;
+  document.getElementById("out").hidden = false; 
+}
+/*
+10 ARRAY a
+20 a[0] = "car"
+30 a[1] = "bus"
+40 a[2] = "bike"
+50 print a
+
+S = ""
+FOR I = 0 TO 5
+  A0 = INT(0 = I) * 10
+  A1 = INT(1 = I) * 4
+  A2 = INT(2 = I) * 13
+  A3 = INT(3 = I) * 13
+  A4 = INT(4 = I) * 24
+
+  R = A0 + A1 + A2 + A3 + A4
+  S = S + CHR(R + 65)
+NEXT I
+PRINT S
+*/
+</script>
+  </body>
+</html>
