@@ -4,7 +4,6 @@
 <h3>Wendy Function Creator</h3>
 Type your name: <input type="text" id="userName" value="Wendy"><p><p/>
 
-<button onclick="myFunction()">Click me</button>
 <p id="demo"></p>
 
 <button onclick="onClick()">Create</button><p><p/>
@@ -14,12 +13,8 @@ Try it at repl.it: <a href="https://repl.it/languages/basic"  target="_blank">ht
 </div>
 
 <script>
-  function myFunction() {
-  document.getElementById("demo").innerHTML = "Hello World";
-}
 function wendy(userName) {
   var everything = 42;
-
   var me_and = 23;
   var x, result = '';
   result += `EVERYTHING = ${everything}\n`;
@@ -48,6 +43,14 @@ function wendy(userName) {
 }
 
 function onClick() {
+  try {
+     var x = ``;
+    console.error("no error");
+  } catch (error) {
+    console.error(error);
+    // expected output: ReferenceError: nonExistentFunction is not defined
+    // Note - error messages will vary depending on browser
+  }
   var userName = document.getElementById("userName").value;
   var result = wendy(userName.substr(0,16).toUpperCase());
   document.getElementById("result").innerHTML = result;
