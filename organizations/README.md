@@ -7,6 +7,6 @@
 * **[ether](https://github.com/kasajian-ether)**
   * Code and stuff thrown into the ether
 * **[unorganization](https://github.com/Unorganization)**
-  * Colleciton of live repos (mostly private) with no particular organizaiton -- almost all uninteresting to you
+  * Colleciton of live repos (mostly private) with no particular organization -- almost all uninteresting to you
 * **[stuff I deleted](https://github.com/kasajian-archived)**
-  * I don't delete stuff.  I archive permanently because the world doesn't have enough junk
+  * This is stuff I've deleted from elsewhere.
