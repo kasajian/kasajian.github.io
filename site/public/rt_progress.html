@@ -35,21 +35,18 @@ new Date("10/11/2023"),
 new Date("10/12/2023"),
 new Date("10/13/2023"),
 new Date("10/16/2023"),
-new Date("12/31/9999"),
 ]
 
 const now = new Date()
-<!-- const noon_now = new Date(2029, 9, 16) -->
-<!-- const noon_now = new Date("10/15/2023") -->
+<!-- const noon_now = new Date(2023, 9, 16) -->
 const noon_now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-let progress = list.findIndex(_ => _ >= noon_now) - 1
+let progress = list.findLastIndex(_ => _ <= noon_now)
 if (progress < 0 ) { progress = 0 }
 const total = list.length - 1
 const perc = `${(progress / total * 100).toFixed(2)}%`
 
-const output = `<p>(${progress} out of ${total} days completed)</p> ` + unibar(progress,total,15,1) + ` :  ${perc}`
-
+const output = `<p>(${progress + 1} out of ${list.length} days)</p> ` + unibar(progress,total,15,1) + ` :  ${perc}`
 document.getElementById("root").innerHTML = output
 
 </script>
