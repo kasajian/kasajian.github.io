@@ -1,0 +1,55 @@
+<div id="root"></div>
+
+<script>
+
+document.getElementById("root").innerHTML = "yo"
+
+unibar=function(a,e,r,c){var s,b,o,f,k="";if(a){for(e||(e=1),r||(r=25),c||(c=0),s=e/r,b=Math.floor(a/s),f=0;b>f;f++)k+="█";switch(Math.round((a/s-Math.floor(a/s))/.125)){case 1:k+="▏";break;case 2:k+="▎";break;case 3:k+="▍";break;case 4:k+="▌";break;case 5:k+="▋";break;case 6:k+="▊";break;case 7:k+="▉";break;case 8:k+="█"}}if(1==c)for(o=r-k.length,f=0;o>f;f++)k+="░";return k};
+
+const list = [
+new Date("9/7/2023")  ,
+new Date("9/8/2023")  ,
+new Date("9/11/2023") ,
+new Date("9/12/2023") ,
+new Date("9/13/2023") ,
+new Date("9/14/2023") ,
+new Date("9/15/2023") ,
+new Date("9/18/2023") ,
+new Date("9/19/2023") ,
+new Date("9/20/2023") ,
+new Date("9/21/2023") ,
+new Date("9/22/2023") ,
+new Date("9/25/2023") ,
+new Date("9/26/2023") ,
+new Date("9/27/2023") ,
+new Date("9/28/2023") ,
+new Date("9/29/2023") ,
+new Date("10/2/2023") ,
+new Date("10/3/2023") ,
+new Date("10/4/2023") ,
+new Date("10/5/2023") ,
+new Date("10/6/2023") ,
+new Date("10/9/2023") ,
+new Date("10/10/2023"),
+new Date("10/11/2023"),
+new Date("10/12/2023"),
+new Date("10/13/2023"),
+new Date("10/16/2023"),
+new Date("12/31/9999"),
+]
+
+const now = new Date()
+<!-- const noon_now = new Date(2029, 9, 16) -->
+<!-- const noon_now = new Date("10/15/2023") -->
+const noon_now = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+let progress = list.findIndex(_ => _ >= noon_now) - 1
+if (progress < 0 ) { progress = 0 }
+const total = list.length - 1
+const perc = `${(progress / total * 100).toFixed(2)}%`
+
+const output = `<p>(${progress} out of ${total} days completed)</p> ` + unibar(progress,total,15,1) + ` :  ${perc}`
+
+document.getElementById("root").innerHTML = output
+
+</script>
