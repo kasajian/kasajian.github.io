@@ -1,7 +1,7 @@
 ## My organizations
 
 * **[zumalifeguard](https://github.com/zumalifeguard)**
-  * Various snippets — A wiki of stuff: some code, philosophy, but mostly random nonsense
+  * Various snippets — A wiki of stuff: some code, mostly random nonsense
 * **[ether](https://github.com/kasajian-ether)**
   * Code and stuff thrown into the ether
 * **[unorganization](https://github.com/Unorganization)**
